@@ -1,1 +1,251 @@
+# 🚀 Sales Data Automation Pipeline
 
+An end-to-end sales reporting automation pipeline built using **n8n**, **MySQL**, **SQL**, **Docker**, and **SMTP**. This project automates the complete process of uploading sales data, analyzing it, generating reports, sending them via email, and preparing the database for the next execution.
+
+---
+
+## 📌 Project Overview
+
+This project demonstrates an ETL (Extract, Transform, Load) workflow using **n8n**.
+
+The workflow accepts a CSV file through an n8n Form Trigger, extracts the data, stores it in a MySQL database, performs SQL-based analytics, generates a formatted sales report, emails the report automatically, and finally clears the database to prepare for the next upload.
+
+---
+
+## 🚀 Workflow
+
+```text
+Upload Sales CSV
+        │
+        ▼
+Extract Data from CSV
+        │
+        ▼
+Insert Data into MySQL
+        │
+        ▼
+Execute SQL Analytics
+        │
+        ▼
+Generate Sales Report
+        ├────────► Send Email
+        │
+        └────────► Clear Sales Data
+```
+
+---
+
+## ✨ Features
+
+- Upload sales data through an n8n Form
+- Automatically extract CSV records
+- Store data in MySQL
+- Execute SQL analytics
+- Calculate Total Sales
+- Calculate Total Orders
+- Calculate Average Order Value
+- Find Top Selling Product
+- Generate Region-wise Sales Report
+- Generate Product-wise Revenue Report
+- Generate Daily Sales Report
+- Automatically email the report
+- Clear the database after execution
+- Docker-based deployment
+
+---
+
+## 🛠️ Tech Stack
+
+| Technology | Purpose |
+|------------|---------|
+| n8n | Workflow Automation |
+| MySQL | Database |
+| SQL | Sales Analytics |
+| Docker | Containerization |
+| Gmail SMTP | Email Automation |
+| CSV | Data Source |
+
+---
+
+## 📊 SQL Analytics Performed
+
+The workflow automatically calculates:
+
+- Total Sales
+- Total Orders
+- Average Order Value
+- Top Selling Product
+- Region-wise Sales
+- Product-wise Revenue
+- Daily Sales Summary
+
+---
+
+## 📁 Project Structure
+
+```text
+sales-data-automation-pipeline/
+│
+├── README.md
+├── LICENSE
+├── .gitignore
+│
+├── workflow/
+│   └── sales-data-automation.json
+│
+├── data/
+│   └── sales_data_sample.csv
+│
+├── sql/
+│   ├── create_table.sql
+│   └── analytics_queries.sql
+│
+├── reports/
+│   └── sample_report.txt
+│
+├── screenshots/
+│   ├── workflow.png
+│   ├── mysql_table.png
+│   ├── sql_results.png
+│   └── email_report.png
+│
+└── docs/
+    └── architecture.png
+```
+
+---
+
+## ⚙️ Setup Instructions
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/your-username/sales-data-automation-pipeline.git
+```
+
+---
+
+### 2. Start n8n using Docker
+
+```bash
+docker run -it --rm \
+-p 5678:5678 \
+-v ~/.n8n:/home/node/.n8n \
+docker.n8n.io/n8nio/n8n
+```
+
+---
+
+### 3. Import the Workflow
+
+Import the workflow file:
+
+```
+workflow/sales-data-automation.json
+```
+
+---
+
+### 4. Configure Credentials
+
+Before running the workflow, configure:
+
+- MySQL Connection
+- SMTP (Gmail)
+- Database Credentials
+
+---
+
+### 5. Run the Workflow
+
+1. Open the n8n Form URL.
+2. Upload the sample CSV file.
+3. The workflow will:
+   - Extract CSV data
+   - Insert records into MySQL
+   - Execute SQL queries
+   - Generate the sales report
+   - Send the report via email
+   - Clear the database
+
+---
+
+## 📧 Sample Report
+
+The generated report includes:
+
+- Total Sales
+- Total Orders
+- Average Order Value
+- Top Selling Product
+- Region-wise Sales
+- Product-wise Revenue
+- Daily Sales Summary
+
+A sample report is available in:
+
+```
+reports/sample_report.txt
+```
+
+---
+
+## 📸 Screenshots
+
+### Workflow
+
+![Workflow](screenshots/workflow.png)
+
+### MySQL Table
+
+![MySQL](screenshots/mysql_table.png)
+
+### SQL Results
+
+![SQL Results](screenshots/sql_results.png)
+
+### Email Report
+
+![Email Report](screenshots/email_report.png)
+
+---
+
+## 💡 Skills Demonstrated
+
+- Workflow Automation
+- ETL Pipeline Design
+- SQL Query Writing
+- MySQL Database Management
+- Business KPI Reporting
+- Email Automation
+- Docker Deployment
+- Data Processing
+- Data Analytics
+
+---
+
+## 🔮 Future Enhancements
+
+- Power BI Dashboard Integration
+- Python Data Visualizations
+- PDF Report Generation
+- Scheduled Daily Reports
+- Slack Notifications
+- Microsoft Teams Notifications
+- AWS Deployment
+- Error Logging & Monitoring
+
+---
+
+## 👨‍💻 Author
+
+**Anurag Pandey**
+
+- GitHub: https://github.com/your-username
+- LinkedIn: https://linkedin.com/in/your-linkedin-profile
+
+---
+
+## ⭐ Support
+
+If you found this project useful, consider giving it a ⭐ on GitHub!
