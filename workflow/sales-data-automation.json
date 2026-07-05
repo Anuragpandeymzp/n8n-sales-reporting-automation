@@ -1,0 +1,232 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "table": {
+          "__rl": true,
+          "mode": "list",
+          "value": "sales_data"
+        },
+        "options": {}
+      },
+      "id": "71d1496e-ced8-4f6f-8e90-4f6c2897d8a9",
+      "name": "Insert Sales Data",
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.5,
+      "position": [
+        -240,
+        -80
+      ],
+      "credentials": {
+        "mySql": {
+          "id": "ap1RaCpLbponX2sC",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.all();\n\nlet totalSales = \"\";\nlet totalOrders = \"\";\nlet avgOrderValue = \"\";\nlet topProduct = \"\";\nlet regionSales = \"\";\nlet productSales = \"\";\nlet dailySales = \"\";\n\n// Total Sales & Orders\nif (data[0]) {\n  totalSales = data[0].json.Total_Sales;\n  totalOrders = data[0].json.Total_Orders;\n}\n\n// Average Order Value\nif (data[1]) {\n  avgOrderValue = Number(data[1].json.Average_Order_Value).toFixed(2);\n}\n\n// Top Product\nif (data[2]) {\n  topProduct = `${data[2].json.Product} (₹${data[2].json.Total_Sales})`;\n}\n\n// Region-wise Sales\nif (data[3]) {\n  regionSales = data\n    .filter(item => item.json.Region)\n    .map(item => `• ${item.json.Region}: ₹${item.json.Total_Sales}`)\n    .join(\"\\n\");\n}\n\n// Product-wise Sales\nproductSales = data\n  .filter(item => item.json.Product && item.json.Revenue)\n  .map(item =>\n    `• ${item.json.Product}\n     Orders: ${item.json.Orders}\n     Units Sold: ${item.json.Units_Sold}\n     Revenue: ₹${item.json.Revenue}`\n  )\n  .join(\"\\n\\n\");\n\n// Daily Sales\ndailySales = data\n  .filter(item => item.json.Date)\n  .map(item => `• ${item.json.Date}: ₹${item.json.Daily_Sales}`)\n  .join(\"\\n\");\n\nreturn [{\n  json: {\n    report: `📊 SALES PERFORMANCE REPORT\n\n══════════════════════════════\n\n💰 Total Sales: ₹${totalSales}\n🛒 Total Orders: ${totalOrders}\n💵 Average Order Value: ₹${avgOrderValue}\n\n🏆 Top Selling Product:\n${topProduct}\n\n══════════════════════════════\n\n🌍 REGION-WISE SALES\n\n${regionSales}\n\n══════════════════════════════\n\n📦 PRODUCT-WISE SALES\n\n${productSales}\n\n══════════════════════════════\n\n📅 DAILY SALES\n\n${dailySales}\n\n══════════════════════════════\n\n✅ Report Generated Automatically by n8n\n📌 Data Source: MySQL\n`\n  }\n}];"
+      },
+      "id": "f91c3046-f9ba-4082-a8ff-5a7fd9b540f4",
+      "name": "Generate Report Text",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        96,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "formTitle": "Sales Data Upload Portal",
+        "formDescription": "Upload sales data files (CSV or Excel) for automated processing and reporting. The system will calculate KPIs, analyze sales performance, and generate automated reports.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Upload Sales Data File",
+              "fieldType": "file",
+              "fieldName": "sales_file",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a4946a90-087b-4980-8e28-f2a128aabff5",
+      "name": "Upload Files Form",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        -544,
+        0
+      ],
+      "webhookId": "e811c125-6b05-4ee6-be73-7943aa24877e"
+    },
+    {
+      "parameters": {
+        "binaryPropertyName": "sales_file",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        -400,
+        0
+      ],
+      "id": "c39da2fa-37c0-4778-bf72-f1901365ebc9",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT\n    SUM(TotalAmount) AS Total_Sales,\n    COUNT(SaleID) AS Total_Orders\nFROM sales_data;\n\nSELECT\n    AVG(TotalAmount) AS Average_Order_Value\nFROM sales_data;\n\nSELECT\n    Product,\n    SUM(TotalAmount) AS Total_Sales\nFROM sales_data\nGROUP BY Product\nORDER BY Total_Sales DESC\nLIMIT 1;\n\nSELECT\n    Region,\n    SUM(TotalAmount) AS Total_Sales\nFROM sales_data\nGROUP BY Region\nORDER BY Total_Sales DESC;\n\nSELECT\n    Product,\n    COUNT(*) AS Orders,\n    SUM(Quantity) AS Units_Sold,\n    SUM(TotalAmount) AS Revenue\nFROM sales_data\nGROUP BY Product\nORDER BY Revenue DESC;\n\nSELECT\n    Date,\n    SUM(TotalAmount) AS Daily_Sales\nFROM sales_data\nGROUP BY Date\nORDER BY Date;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.5,
+      "position": [
+        -80,
+        -80
+      ],
+      "id": "3840c617-82cd-4890-b0bd-d08d44fbcb5b",
+      "name": "Execute a SQL query",
+      "credentials": {
+        "mySql": {
+          "id": "ap1RaCpLbponX2sC",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "anu85866161@gmail.com",
+        "toEmail": "anu858661612@gmail.com",
+        "subject": "sales_report",
+        "emailFormat": "text",
+        "text": "={{$json.report}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        288,
+        -80
+      ],
+      "id": "62b57193-ded8-4b3e-a704-2a12a6e6f779",
+      "name": "Send an Email",
+      "webhookId": "b8e46711-0003-4e5c-aa5e-6a6a005e4eff",
+      "credentials": {
+        "smtp": {
+          "id": "mcexkzvXkyBsGN4E",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "TRUNCATE TABLE sales_data;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.5,
+      "position": [
+        224,
+        -256
+      ],
+      "id": "b2241efd-8bd9-46fd-9b0e-d7a791010b82",
+      "name": "Clear Sales Data",
+      "notesInFlow": false,
+      "credentials": {
+        "mySql": {
+          "id": "ap1RaCpLbponX2sC",
+          "name": "MySQL account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Insert Sales Data": {
+      "main": [
+        [
+          {
+            "node": "Execute a SQL query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Report Text": {
+      "main": [
+        [
+          {
+            "node": "Send an Email",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Clear Sales Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload Files Form": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Insert Sales Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute a SQL query": {
+      "main": [
+        [
+          {
+            "node": "Generate Report Text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send an Email": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "5bf38c6b-551b-46bb-b91d-84e136e43124",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d582a74f553669cf76369467431860068dadd8019d53b2c09c38143bd04a4857"
+  },
+  "nodeGroups": [],
+  "id": "VCakizweraJNs2vr",
+  "tags": []
+}
