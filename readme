@@ -1,6 +1,6 @@
 # 🚀 Sales Data Automation Pipeline
 
-An end-to-end sales reporting automation pipeline built using **n8n**, **MySQL**, **SQL**, **Docker**, and **SMTP**. This project automates the complete process of uploading sales data, analyzing it, generating reports, sending them via email, and preparing the database for the next execution.
+An end-to-end sales reporting automation pipeline built using **n8n**, **MySQL**, **SQL**, **Docker**, and **Gmail SMTP**. This project automates the complete process of uploading sales data, analyzing it, generating reports, sending them via email, and preparing the database for the next execution.
 
 ---
 
@@ -37,20 +37,20 @@ Generate Sales Report
 
 ## ✨ Features
 
-- Upload sales data through an n8n Form
-- Automatically extract CSV records
-- Store data in MySQL
-- Execute SQL analytics
-- Calculate Total Sales
-- Calculate Total Orders
-- Calculate Average Order Value
-- Find Top Selling Product
-- Generate Region-wise Sales Report
-- Generate Product-wise Revenue Report
-- Generate Daily Sales Report
-- Automatically email the report
-- Clear the database after execution
-- Docker-based deployment
+- 📂 Upload sales data using n8n Form Trigger
+- 📥 Automatically extract CSV records
+- 🗄️ Insert records into MySQL
+- 📊 Execute SQL analytics
+- 💰 Calculate Total Sales
+- 🛒 Calculate Total Orders
+- 📈 Calculate Average Order Value
+- 🏆 Identify Top Selling Product
+- 🌍 Generate Region-wise Sales Report
+- 📦 Generate Product-wise Revenue Report
+- 📅 Generate Daily Sales Report
+- 📧 Automatically send sales reports via Email
+- 🧹 Clear database after successful execution
+- 🐳 Docker-based deployment
 
 ---
 
@@ -84,7 +84,7 @@ The workflow automatically calculates:
 ## 📁 Project Structure
 
 ```text
-sales-data-automation-pipeline/
+n8n-sales-reporting-automation/
 │
 ├── README.md
 ├── LICENSE
@@ -120,7 +120,8 @@ sales-data-automation-pipeline/
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/sales-data-automation-pipeline.git
+git clone https://github.com/Anuragpandeymzp/n8n-sales-reporting-automation.git
+cd n8n-sales-reporting-automation
 ```
 
 ---
@@ -140,7 +141,7 @@ docker.n8n.io/n8nio/n8n
 
 Import the workflow file:
 
-```
+```text
 workflow/sales-data-automation.json
 ```
 
@@ -148,11 +149,11 @@ workflow/sales-data-automation.json
 
 ### 4. Configure Credentials
 
-Before running the workflow, configure:
+Configure the following credentials inside n8n:
 
-- MySQL Connection
-- SMTP (Gmail)
-- Database Credentials
+- MySQL Database
+- Gmail SMTP
+- MySQL Table
 
 ---
 
@@ -160,7 +161,7 @@ Before running the workflow, configure:
 
 1. Open the n8n Form URL.
 2. Upload the sample CSV file.
-3. The workflow will:
+3. The workflow will automatically:
    - Extract CSV data
    - Insert records into MySQL
    - Execute SQL queries
@@ -172,7 +173,7 @@ Before running the workflow, configure:
 
 ## 📧 Sample Report
 
-The generated report includes:
+The generated report contains:
 
 - Total Sales
 - Total Orders
@@ -182,9 +183,9 @@ The generated report includes:
 - Product-wise Revenue
 - Daily Sales Summary
 
-A sample report is available in:
+Sample file:
 
-```
+```text
 reports/sample_report.txt
 ```
 
@@ -226,14 +227,13 @@ reports/sample_report.txt
 
 ## 🔮 Future Enhancements
 
-- Power BI Dashboard Integration
-- Python Data Visualizations
-- PDF Report Generation
-- Scheduled Daily Reports
-- Slack Notifications
-- Microsoft Teams Notifications
-- AWS Deployment
-- Error Logging & Monitoring
+- 📊 Power BI Dashboard Integration
+- 📈 Python Data Visualization
+- 📄 PDF Report Generation
+- ⏰ Scheduled Workflow Execution
+- ☁️ Cloud Deployment (AWS/Azure/GCP)
+- 📱 Slack & Microsoft Teams Notifications
+- 📋 Error Logging & Monitoring
 
 ---
 
@@ -241,11 +241,16 @@ reports/sample_report.txt
 
 **Anurag Pandey**
 
-- GitHub: https://github.com/your-username
-- LinkedIn: https://linkedin.com/in/your-linkedin-profile
+- **GitHub:** https://github.com/Anuragpandeymzp
 
 ---
 
 ## ⭐ Support
 
-If you found this project useful, consider giving it a ⭐ on GitHub!
+If you found this project useful, please consider giving it a ⭐ on GitHub.
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License.
